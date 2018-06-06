@@ -1,0 +1,152 @@
+<div class=posttinbox>
+<input id=search type=search placeholder="Tìm kiếm" name="search" value=""><br><br>
+<form action="/admin/category" method="post" enctype="multipart/form-data">
+{{msg.err}}
+<input type=hidden name="doaction" value="1">
+Tên nhóm sản phẩm : <br><input type=text name="name" value="">
+<br>
+<input type=submit name="ok" value="ADD">
+</form>
+</div>
+<div id=categorylist>
+	
+</div>
+<style type="text/css">
+.cate_row:after{
+    display:block;
+    content: "";
+    clear: both;
+}
+.cate_row{
+    border:1px solid #b6b6b6;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+    .cate_delete,.cate_edit{
+        cursor: pointer;
+        color: #08c;
+        float: right;
+        margin-left: 10px;
+    }
+
+</style>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+function loadcatelist(){
+$.post( "/api/category/getlist", {})
+  .done(function( data ) {
+  	var html="";
+    var jsdata=JSON.parse(data);
+    if(jsdata.length>0)
+    {
+    	for (var i = jsdata.length - 1; i >= 0; i--) {
+    		var cate=jsdata[i];
+    		html+="<div class='cate_row' cate_id="+cate.id+"><span class=cate_name>"+cate.name+"</span> <span class=cate_edit cate_id="+cate.id+">Sữa</span> <span class=cate_delete cate_id="+cate.id+">Xóa</span></div>";
+    	}
+
+    }
+    $("#categorylist").html(html);
+});
+}
+loadcatelist();
+
+
+
+
+
+$(document).on("input","#search",function(){
+    $(".cate_row").hide();
+    $(".cate_row").each(function(){
+        var find=xoadau($("#search").val());
+        var check=xoadau(decodeURI($(this).find(".cate_name").text()));
+        console.log(find,check,$(this).find(".cate_name").text());
+        if(check.indexOf(find)>-1)
+        {
+$(this).show();
+        }
+    });
+});
+
+
+
+
+
+
+$(document).on("click",".cate_edit",function(){
+    $(".msg_tbl").remove();
+    var cate_id=$(this).attr("cate_id");
+$("body").append("<table class=msg_tbl><tr><td valign=middle align=center>"+
+    "<div class='msg_box HWCO'>"+
+    "<div class=msg_title>Đổi tên nhóm</div>"+
+    "<div class=msg_content><input type=text class='care_rename_input' cate_id='"+cate_id+"' value='"+$(".cate_row[cate_id='"+cate_id+"']").find(".cate_name").text()+"'></div>"+
+    "<div class=msg_footer><div class='rename_cate btn' cate_id='"+$(this).attr("cate_id")+"'>Đổi tên</div></div>"+
+    "</div>"+
+    "</td></tr></table>");
+});
+
+
+$(document).on("click",".rename_cate",function(){
+    var cate_id=$(this).attr("cate_id");
+$.post( "/api/category/edit", {id:cate_id,name:$(".care_rename_input[cate_id='"+cate_id+"']").val()})
+.done(function( data ) {
+var jsdata=JSON.parse(data);
+if(jsdata.sys=="false")
+{
+    alert(jsdata.err);
+}
+else
+{
+    $(".msg_tbl").remove();
+    loadcatelist();
+}
+});
+
+});
+
+
+
+
+
+
+
+
+$(document).on("click",".cate_delete",function(){
+    $(".msg_tbl").remove();
+$("body").append("<table class=msg_tbl><tr><td valign=middle align=center>"+
+    "<div class='msg_box HWCO'>"+
+    "<div class=msg_title>Thông báo</div>"+
+    "<div class=msg_content>Bạn muốn xóa danh mục này?</div>"+
+    "<div class=msg_footer><div class='delete_cate btn' cate_id='"+$(this).attr("cate_id")+"'>Xóa</div></div>"+
+    "</div>"+
+    "</td></tr></table>");
+});
+
+
+$(document).on("click",".delete_cate",function(){
+    var cate_id=$(this).attr("cate_id");
+$.post( "/api/category/remove", {id:cate_id})
+.done(function( data ) {
+var jsdata=JSON.parse(data);
+if(jsdata.sys=="false")
+{
+    alert("Không thể xóa");
+}
+else
+{
+    $(".msg_tbl").remove();
+    $(".cate_row[cate_id='"+cate_id+"']").remove();
+}
+});
+
+});
+
+
+
+
+
+
+
+	});
+</script>

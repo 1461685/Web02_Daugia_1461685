@@ -1,0 +1,61 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<title>{{header.title}}</title>
+<script src="{{config.rooturl}}media/js/jquery.js"></script>
+
+<!--<link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&amp;subset=latin-ext,vietnamese" rel="stylesheet">-->
+<link rel="stylesheet" type="text/css" href="{{config.rooturl}}media/css/main.css"/>
+<link rel="stylesheet" type="text/css" href="{{config.rooturl}}media/css/mobile-main.css"/>
+<link rel="stylesheet" type="text/css" href="{{config.rooturl}}media/css/fontawesome-all.min.css"/>
+<script src="{{config.rooturl}}socket.io/socket.io.js"></script>
+<script>
+var ROOT="{{config.rooturl}}";
+var u_id={{header.u_id}};
+var serverTime={{config.serverTime}};
+setInterval(function(){serverTime+=1000;},1000);
+</script>
+<script src="{{config.rooturl}}media/js/main.js"></script>
+<base href="{{config.rooturl}}">
+
+{{header.add}}
+</head>
+<body>
+
+<div class=main>
+{{main.menu}}
+<div class=mgr><div class=wrapper>
+	<a class=mgr_i href="/">Kết thúc ngay</a>
+	{{main.category}}
+</div></div>
+<div class=infobar><div class=wrapper>
+	<div class="baritems">
+                            <div class="baritem t_left">
+                            <i class="fa fa-calendar-alt"></i>
+                                Điều khoản hoàn trả 14 ngày</div>
+                            <div class="baritem t_mid">
+                            <i class="fa fa-shipping-fast"></i>
+                                Phí giao hàng : 29.000 ₫</div>
+                            <div class="baritem t_right">
+                            <i class="fa fa-phone-square"></i>
+                                02836222111</div>
+                        </div>
+</div></div>
+<div class="content">
+	<div class=wrapper>
+{{main.content}}
+	</div>
+</div>
+</div>
+
+
+<div class=footer>
+	<div class="fcol fc1"><img src="{{config.rooturl}}media/image/logo/1.png"><br>© 2018 Vikclass Development.</div>
+	<div class="fcol"></div><div class="fcol"></div><div class="fcol"></div><div class="fcol"></div>
+</div>
+</body>
+</html>
